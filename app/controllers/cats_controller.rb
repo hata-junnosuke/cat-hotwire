@@ -3,17 +3,13 @@ class CatsController < ApplicationController
 
   # GET /cats
   def index
-    # # `Cat.ransack`でCatに対してransackを使う
-    # # params[:q]には検索フォームで指定した検索条件が入る
-    # @search = Cat.ransack(params[:q])
-    # # デフォルトのソートをid降順にする
-    # @search.sorts = 'id desc' if @search.sorts.empty?
-    # # `@search.result`で検索結果となる@catsを取得する
-    # # 検索結果に対してはkaminariのpageメソッドをチェーンできる
-    # @cats = @search.result.page(params[:page])
-
+    # `Cat.ransack`でCatに対してransackを使う
+    # params[:q]には検索フォームで指定した検索条件が入る
     @search = Cat.ransack(params[:q])
+    # デフォルトのソートをid降順にする
     @search.sorts = 'id desc' if @search.sorts.empty?
+    # `@search.result`で検索結果となる@catsを取得する
+    # 検索結果に対してはkaminariのpageメソッドをチェーンできる
     @cats = @search.result.page(params[:page])
   end
 
@@ -35,7 +31,8 @@ class CatsController < ApplicationController
     @cat = Cat.new(cat_params)
 
     if @cat.save
-      redirect_to @cat, notice: "Cat was successfully created."
+      flash.now.notice = "ねこを登録しました。"
+
     else
       render :new, status: :unprocessable_entity
     end
@@ -44,7 +41,7 @@ class CatsController < ApplicationController
   # PATCH/PUT /cats/1
   def update
     if @cat.update(cat_params)
-      redirect_to @cat, notice: "Cat was successfully updated.", status: :see_other
+      flash.now.notice = "ねこを更新しました。"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -53,7 +50,7 @@ class CatsController < ApplicationController
   # DELETE /cats/1
   def destroy
     @cat.destroy
-    redirect_to cats_url, notice: "Cat was successfully destroyed.", status: :see_other
+    flash.now.notice = "ねこを削除しました。"
   end
 
   private
